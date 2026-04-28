@@ -1,3 +1,4 @@
+import './index.css';
 import gamesData from './data/games.js';
 
 // State management
