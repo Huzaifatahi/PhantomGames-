@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&display=swap');
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .bg-radial-gradient {
+    background: radial-gradient(at top, var(--color-zinc-900), var(--color-zinc-950));
+  }
+}
+
+body {
+  @apply bg-[#09090b] text-slate-100 antialiased;
+}
+
+.glass-panel {
+  @apply bg-zinc-950/50 backdrop-blur-md border border-white/10;
+}
+
+.game-card {
+  @apply bg-zinc-900/50 border border-white/5 rounded-xl p-3 hover:border-indigo-500/50 transition-all cursor-pointer shadow-xl;
+}
