@@ -1,13 +1,177 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Flux | Unblocked Arcades</title>
+    <!-- Use Tailwind via local build for AI Studio, but this structure matches production -->
+    <link rel="stylesheet" href="./src/index.css">
+</head>
+<body class="bg-[#09090b] text-slate-100 font-sans overflow-hidden">
+    <div id="app" class="flex flex-col h-screen">
+        <!-- Header -->
+        <header class="h-16 border-b border-white/10 flex items-center justify-between px-8 bg-zinc-950/50 backdrop-blur-md z-50 shrink-0">
+            <div id="logo-btn" class="flex items-center gap-3 cursor-pointer group">
+                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(139,92,246,0.3)] transition-transform group-hover:scale-105">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
+                </div>
+                <h1 class="text-xl font-bold tracking-tighter uppercase italic">Nexus Flux</h1>
+            </div>
+            
+            <div class="flex-1 max-w-md mx-8">
+                <div class="relative group">
+                    <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-indigo-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input id="search-input" type="text" placeholder="Search for a game..." class="w-full bg-zinc-900 border border-white/5 rounded-full py-2 px-10 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500/50 placeholder:text-zinc-600 transition-all font-medium">
+                </div>
+            </div>
 
+            <div class="flex items-center gap-6">
+                <span id="game-count" class="hidden md:inline-block text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded border border-indigo-500/20 uppercase tracking-widest">
+                    Loading Games...
+                </span>
+                <div class="w-8 h-8 rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center text-zinc-500 hover:text-white transition-colors cursor-pointer">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 flex overflow-hidden">
+            <!-- Sidebar -->
+            <aside class="w-64 border-r border-white/5 p-6 flex flex-col gap-8 bg-zinc-950/20 hidden lg:flex shrink-0">
+                <nav class="space-y-1">
+                    <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Library</p>
+                    <button id="home-nav" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all bg-white/5 text-indigo-400 border border-white/5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Main Hub
+                    </button>
+                    <button class="w-full flex items-center gap-3 px-3 py-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg text-sm transition-colors text-left">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Recently Played
+                    </button>
+                </nav>
+
+                <nav id="categories-nav" class="space-y-1">
+                    <p class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Categories</p>
+                    <!-- Categories injected here -->
+                </nav>
+
+                <div class="mt-auto pt-6 border-t border-white/5">
+                    <div class="p-4 rounded-xl bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/20">
+                        <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-2 italic">Pro Version</p>
+                        <p class="text-[11px] text-zinc-400 leading-relaxed">Unlock dedicated servers and high-speed cloud sync.</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main id="main-content" class="flex-1 p-8 overflow-y-auto scrollbar-hide bg-radial-gradient">
+                <!-- Browser View (Default) -->
+                <div id="browser-view" class="space-y-8">
+                    <!-- Banner -->
+                    <section id="hero-banner" class="relative h-64 rounded-2xl overflow-hidden group shadow-2xl">
+                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-900/90 via-zinc-900/60 to-transparent z-10"></div>
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center opacity-60 scale-100 group-hover:scale-105 transition-transform duration-1000"></div>
+                        <div class="relative z-20 p-8 flex flex-col justify-center h-full max-w-lg">
+                            <span class="text-[10px] bg-indigo-500 text-white font-bold uppercase px-2 py-0.5 rounded w-fit mb-4 tracking-widest">Featured Game</span>
+                            <h2 class="text-5xl font-black italic tracking-tighter mb-4 leading-none uppercase">CYBER EXPLORER</h2>
+                            <p class="text-zinc-300 text-sm mb-8 leading-relaxed">Experience a new dimension of web-based gaming with unblocked titles and optimized performance.</p>
+                            <button class="bg-white text-black font-bold px-8 py-3 rounded-full w-fit hover:bg-indigo-400 hover:text-white transition-all shadow-lg active:scale-95 text-xs uppercase tracking-widest">
+                                EXPLORE LIBRARY
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- Catalog -->
+                    <section>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 id="view-title" class="text-xs font-bold text-zinc-400 flex items-center gap-2 tracking-widest uppercase">
+                                <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.8)]"></span>
+                                DISCOVER GAMES
+                            </h3>
+                        </div>
+                        <div id="game-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                            <!-- Cards injected here -->
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Player View (Hidden by default) -->
+                <div id="player-view" class="hidden space-y-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-4">
+                            <button id="back-btn" class="p-2 border border-white/10 rounded-lg hover:bg-white/5 transition-colors text-zinc-400 hover:text-white">
+                                <svg class="w-5 h-5 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                            <div>
+                                <h3 id="current-game-title" class="text-2xl font-black italic uppercase tracking-tighter text-white">GAME TITLE</h3>
+                                <p id="current-game-meta" class="text-[10px] text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                                    CATEGORY <span class="w-1 h-1 rounded-full bg-zinc-700"></span> Web Optimized
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button id="popout-btn" class="p-3 border border-white/10 rounded-xl hover:bg-white/5 transition-colors text-zinc-400 group">
+                                <svg class="w-4 h-4 group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </button>
+                            <button id="fullscreen-btn" class="px-6 py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-xs uppercase tracking-widest shadow-lg shadow-indigo-500/20 active:scale-95 transition-all flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m4-4l5 5m11-1v-4m0 0h-4m4 0l-5-5"></path></svg>
+                                Fullscreen
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="aspect-video w-full bg-zinc-950 rounded-2xl border border-white/5 overflow-hidden shadow-2xl relative group">
+                        <iframe id="game-iframe" src="" class="w-full h-full border-none" title="Game Player" allowfullscreen></iframe>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
+                        <div class="md:col-span-3 space-y-4">
+                            <h5 class="text-[10px] uppercase tracking-widest font-bold text-indigo-400 flex items-center gap-2 italic">
+                                System Logs: Description
+                            </h5>
+                            <p id="current-game-desc" class="text-zinc-400 text-sm leading-relaxed max-w-2xl px-4 border-l border-indigo-500/30">
+                                Game description goes here.
+                            </p>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-zinc-950/50 backdrop-blur-md border border-white/10 rounded-xl">
+                                <p class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3">Statistics</p>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center text-[10px] uppercase">
+                                        <span class="text-zinc-500">Rating</span>
+                                        <span class="text-indigo-400 font-bold">8.4 / 10</span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-[10px] uppercase">
+                                        <span class="text-zinc-500">Latency</span>
+                                        <span class="text-green-500 font-bold">12ms</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="h-10 border-t border-white/5 flex items-center justify-between px-6 bg-zinc-950 text-[10px] text-zinc-500 uppercase tracking-widest shrink-0">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span> 
+                    SERVER: STABLE
+                </span>
+                <span class="hidden sm:inline-block">REGION: GLOBAL (PORTABLE)</span>
+                <span class="hidden md:inline-block">FPS: 60.00</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-indigo-400 transition-colors">Discord</a>
+                <a href="#" class="hover:text-indigo-400 transition-colors">Manual</a>
+                <span class="text-zinc-800">Version 2.4.1</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Application Script -->
+    <script type="module" src="./src/main.js"></script>
+</body>
+</html>
